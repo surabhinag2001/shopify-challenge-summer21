@@ -1,24 +1,43 @@
-import logo from './logo.svg';
 import './App.css';
 import axios from "axios";
 import 'semantic-ui-css/semantic.min.css';
-import { Search, Grid, Header, Segment } from 'semantic-ui-react'
+import { Message, Search, Button, Grid, Header, Segment, List, Icon } from 'semantic-ui-react'
 import { useState } from 'react';
 function App() {
   const [searchResult, setSearchResult] = useState(null);
+  const [nominatedMovies, setNominatedMovies] = useState([]);
   const fetchData = async (searchQuery) => {
     const response = await axios.get(
       `http://www.omdbapi.com/?apikey=1a54ad07&s=${searchQuery}`
     );
-    console.log(response.data);
+
     if (response.data.Response === "True") {
       setSearchResult(response.data);
-      console.log(response.data.Search);
-      console.log(searchResult);
+
     }
 
 
   };
+  const nominateMovie = (movie) => {
+    const newNominations = [...nominatedMovies]
+    if (newNominations.length < 5) {
+      newNominations.push(movie);
+      setNominatedMovies(newNominations);
+    }
+
+  }
+  const deleteNomination = (movie) => {
+
+    const newNominations = [...nominatedMovies]
+    for (var i = 0; i < newNominations.length; i++) {
+      if (newNominations[i].imdbID === movie.imdbID) {
+
+        newNominations.splice(i, 1)
+      }
+    }
+    setNominatedMovies(newNominations);
+
+  }
 
   return (
     <div className="App">
@@ -26,52 +45,70 @@ function App() {
         <Search
           open={false}
           onSearchChange={(e, data) => {
-            //console.log(data);
             fetchData(data.value)
           }}
         />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        {/* <div>
-          <button className="fetch-button" onClick={fetchData}>
-            Fetch Data
-        </button>
-          <br />
-        </div> */}
-
-
-        <div className="movies">
+        <List divided verticalAlign='middle'>
           {searchResult &&
-            searchResult.Search.map((movie, index) => {
+            searchResult.Search.map((movie) => {
+              const title = movie.Title;
+              const year = movie.Year;
+              var a = nominatedMovies.indexOf(movie);
+              var f = false;
+              if (a >= 0) { f = true };
+
+
+              return (
+                <List.Item>
+                  <List.Content floated='right'>
+                    <Button
+                      disabled={f}
+                      onClick={() => { nominateMovie(movie) }}
+                    >Nominate</Button>
+                  </List.Content>
+                  <List.Content>
+                    <List.Header>{title}
+                    </List.Header>
+                    {year}
+                  </List.Content>
+                </List.Item>
+              )
+            })}
+        </List>
+        <List divided verticalAlign='middle'>
+          {nominatedMovies &&
+            nominatedMovies.map((movie) => {
               const title = movie.Title;
               const year = movie.Year;
 
               return (
-                <div className="movie" key={index}>
-                  <h3>Movie: {title} </h3>
-                  <h3>Year: {year}</h3>
-                </div>
-              );
+                <List.Item>
+                  <List.Content floated='right'>
+                    <Button basic
+                      icon
+                      onClick={() => { deleteNomination(movie) }}>
+                      <Icon
+                        color='red'
+                        name='close' />
+                    </Button>
+                  </List.Content>
+                  <List.Content>
+                    <List.Header>{title}
+                    </List.Header>
+                    {year}
+                  </List.Content>
+                </List.Item>
+              )
             })}
-
-        </div>
-
-
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        </List>
+        <Message hidden={nominatedMovies.length != 5}
+          success
+          header='You have successfully nominated 5 movies'
+          content='You are allowed to nominate upto 5 movies'
+        />
       </header>
     </div >
   );
 }
 
 export default App;
-//toggle button https://react.semantic-ui.com/elements/button/
-// use search box and icon 
-// for listing https://react.semantic-ui.com/elements/list/
