@@ -8,7 +8,7 @@ function App() {
   const [nominatedMovies, setNominatedMovies] = useState([]);
   const fetchData = async (searchQuery) => {
     const response = await axios.get(
-      `http://www.omdbapi.com/?apikey=1a54ad07&s=${searchQuery}`
+      `https://www.omdbapi.com/?apikey=1a54ad07&s=${searchQuery}`
     );
 
     if (response.data.Response === "True") {
@@ -38,11 +38,14 @@ function App() {
     setNominatedMovies(newNominations);
 
   }
-
+  var searchStyle = {
+    padding: 10,
+    margin: 10
+  }
   return (
     <div className="App">
       <header className="App-header">
-        <div>
+        <div style={searchStyle}>
           <Search
             open={false}
             onSearchChange={(e, data) => {
