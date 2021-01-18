@@ -39,8 +39,11 @@ function App() {
 
   }
   var searchStyle = {
-    padding: 10,
-    margin: 10
+    padding: 20,
+    margin: 10,
+    textAlign: "center",
+    fontFamily: "sans-serif",
+    fontSize: 18
   }
   return (
     <div className="App">
@@ -60,10 +63,10 @@ function App() {
             <Grid columns={2} stackable textAlign='left'>
               {/* <Divider vertical></Divider> */}
 
-              <Grid.Row verticalAlign='middle'>
+              <Grid.Row verticalAlign='top'>
                 <Grid.Column>
-                  <p>Search Results:</p>
-                  <List divided verticalAlign='middle'>
+                  <div style={searchStyle} > <p>Search Results:</p> </div>
+                  <List divided verticalAlign='center'>
                     {searchResult &&
                       searchResult.Search.map((movie) => {
                         const title = movie.Title;
@@ -92,8 +95,8 @@ function App() {
                   </List>
                 </Grid.Column>
                 <Grid.Column>
-                  <p>Nominated movies:</p>
-                  <List divided verticalAlign='top'>
+                  <div style={searchStyle} > <p>Nominated Movies:</p> </div>
+                  <List divided verticalAlign='center'>
                     {nominatedMovies &&
                       nominatedMovies.map((movie) => {
                         const title = movie.Title;
