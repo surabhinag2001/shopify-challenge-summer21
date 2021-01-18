@@ -1,7 +1,7 @@
 import './App.css';
 import axios from "axios";
 import 'semantic-ui-css/semantic.min.css';
-import { Message, Search, Button, Grid, Header, Segment, List, Icon, Container } from 'semantic-ui-react'
+import { Message, Search, Button, Grid, Segment, List, Icon, Container } from 'semantic-ui-react'
 import { useState } from 'react';
 function App() {
   const [searchResult, setSearchResult] = useState(null);
@@ -14,6 +14,9 @@ function App() {
     if (response.data.Response === "True") {
       setSearchResult(response.data);
 
+    }
+    else {
+      setSearchResult(null);
     }
 
 
