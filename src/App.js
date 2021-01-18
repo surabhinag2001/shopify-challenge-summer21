@@ -73,9 +73,9 @@ function App() {
                         const year = movie.Year;
                         var a = nominatedMovies.indexOf(movie);
                         var f = false;
-                        if (a >= 0) { f = true };
-
-
+                        for (var i = 0; i < nominatedMovies.length; i++) {
+                          if (nominatedMovies[i].imdbID === movie.imdbID) { f = true }
+                        }
                         return (
                           <List.Item>
                             <List.Content floated='right'>
